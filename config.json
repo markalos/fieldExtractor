@@ -1,7 +1,7 @@
 { 
 	"worker" : "16",
 	"producer" : {
-		"script" : "MsgProducer",
+		"script" : "MsgProducer.MessageRetrieverProcess",
 		"arguments" : {
 			"scrollTime" : "20m",
 			"winSize" : "1000",
@@ -14,8 +14,8 @@
 			"maxElements" : "100"
 		}
 	},
-	"comsumer" : {
-		"script" : "JsonConfigedParser",
+	"consumer" : {
+		"script" : "JsonConfigedParser.JsonConfigedParser",
 		"arguments" : {
 			"tableName" : "authenticated login",
 			"fields" : {
