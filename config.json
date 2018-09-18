@@ -1,12 +1,30 @@
-{
-	"tableName" : "authenticated login",
-	"fields" : {
-		"name" : "name=([^;]*);",
-		"ip" : "ip=([\\d\\.^;]*);",
-		"oip" : "oip=([\\d\\.^;]*);",
-		"via" : "via=([^;]*);",
-		"ua" : "ua=([^;]*);"
-	}, 
-	"query" : "'imap - user' AND 'authenticated'",
-	"worker" : "16"
+{ 
+	"worker" : "16",
+	"producer" : {
+		"script" : "MsgProducer",
+		"arguments" : {
+			"scrollTime" : "20m",
+			"winSize" : "1000",
+			"query" : "'imap - user' AND 'authenticated'",
+		}
+	},
+	"queue" : {
+		"script" : "MessageQueue", 
+		"arguments" : {
+			"maxElements" : "100"
+		}
+	},
+	"comsumer" : {
+		"script" : "JsonConfigedParser",
+		"arguments" : {
+			"tableName" : "authenticated login",
+			"fields" : {
+				"name" : "name=([^;]*);",
+				"ip" : "ip=([\\d\\.^;]*);",
+				"oip" : "oip=([\\d\\.^;]*);",
+				"via" : "via=([^;]*);",
+				"ua" : "ua=([^;]*);"
+			}
+		}
+	}
 }
