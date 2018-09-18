@@ -18,10 +18,10 @@ def main():
 		configFile = 'config.json'
 	config = jsonLoader(configFile)
 	numOfConcurrentWorker = int(config['worker'])
-	queue = MessageQueue(100, numOfConcurrentWorker)
-	MessageRetrieverProcess("20m", 1000, queue, config['query']).start()
+	queue = MessageQueue(config["queue"]["arguments"], numOfConcurrentWorker)
+	MessageRetrieverProcess(config["producer"]["arguments"], queue).start()
 	for i in range(numOfConcurrentWorker):
-		JsonConfigedParser(config, queue).start()
+		JsonConfigedParser(config["comsumer"]["arguments"], queue).start()
 
 if __name__ == '__main__':
 	main()

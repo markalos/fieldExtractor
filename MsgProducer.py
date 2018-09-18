@@ -27,12 +27,14 @@ esClient = Elasticsearch(
 # Producer, used to get raw log and add to queue
 class MessageRetrieverProcess(Process):
     """retrieve message from elastic search server"""
-    def __init__(self, scrollTime, winSize, queue, query):
+    def __init__(self, config, queue, query):
         super(MessageRetrieverProcess, self).__init__()
-        self.scrollTime = scrollTime
-        self.winSize = winSize
+
+        self.scrollTime = config["scrollTime"]
+        self.winSize = int(config["winSize"])
+        self.query = config["query"]
         self.queue = queue
-        self.query = query
+        
 
     def run(self):
         try:
