@@ -16,8 +16,6 @@ def main():
 		configFile = sys.argv[1]
 	except Exception as e:
 		configFile = 'config.json'
-	print(configFile)
-	return
 	config = jsonLoader(configFile)
 	numOfConcurrentWorker = int(config['worker'])
 	queue = MessageQueue(100, numOfConcurrentWorker)
