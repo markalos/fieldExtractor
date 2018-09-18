@@ -4,7 +4,8 @@ from multiprocessing import Queue
 class MessageQueue(object):
 	def __init__(self, config, numOfWorkers):
 		super(MessageQueue, self).__init__()
-		self.size = config["maxElements"]
+		self.size = int(config["maxElements"])
+		
 		self.queue = Queue(self.size)
 		self.numOfWorkers = numOfWorkers
 
