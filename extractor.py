@@ -1,7 +1,7 @@
 import json
 import sys
+from pydoc import locate
 
-from MessageQueue import MessageQueue
 from MsgProducer import MessageRetrieverProcess
 from JsonConfigedParser import JsonConfigedParser
 
@@ -18,7 +18,8 @@ def main():
 		configFile = 'config.json'
 	config = jsonLoader(configFile)
 	numOfConcurrentWorker = int(config['worker'])
-	queue = MessageQueue(config["queue"]["arguments"], numOfConcurrentWorker)
+	queueClass = locate(config["queue"]["script"])
+	queue = queueClass(config["queue"]["arguments"], numOfConcurrentWorker)
 	MessageRetrieverProcess(config["producer"]["arguments"], queue).start()
 	for i in range(numOfConcurrentWorker):
 		JsonConfigedParser(config["comsumer"]["arguments"], queue).start()

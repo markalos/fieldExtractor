@@ -9,7 +9,7 @@
 		}
 	},
 	"queue" : {
-		"script" : "MessageQueue", 
+		"script" : "MessageQueue.MessageQueue", 
 		"arguments" : {
 			"maxElements" : "100"
 		}
