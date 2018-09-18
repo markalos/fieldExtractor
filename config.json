@@ -6,7 +6,6 @@
 		"oip" : "oip=([\\d\\.^;]*);",
 		"via" : "via=([^;]*);",
 		"ua" : "ua=([^;]*);",
-		"time" : "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2},\\d{3})"
 	}, 
 	"query" : "'imap - user' AND 'authenticated'",
 	"worker" : "16"

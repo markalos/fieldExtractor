@@ -4,6 +4,7 @@ from datetime import datetime
 import time
 
 from multiprocessing import Pool, Process
+from dateutil import parser
 
 from MongoClient import DBManager
 
@@ -71,10 +72,12 @@ class JsonConfigedParser(Process):
         for msg in msgs:
             try:
                 row = dict()
+                timestamp = msg["_source"]["@timestamp"]
                 msg = msg["_source"]["message"]
                 for col in colNames:
                     match = patterns[col].search(msg).group(1)
                     row[col] = match
+                    row['timestamp'] = int(time.mktime(parser.parse(timestamp).timetuple()))
                 res.append(row)
             except Exception as e:
                 logger.exception(e)
