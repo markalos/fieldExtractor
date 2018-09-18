@@ -30,11 +30,13 @@ class JsonConfigedParser(Process):
             self.db = DBManager(dbName = 'elastic', collection = self.tableName,
                 host = 'mongodb://202.121.179.53', port = 27017)
             queue = self.queue
+            patterns = self.buildPatterns()
+            colNames = self.colNames
             while True:
                 task = queue.get()
                 if task is None:
                     break
-                self.extractFieldsFromMessages(task)
+                self.extractFieldsFromMessages(task, patterns, colNames)
         except Exception as e:
             logger.exception(e)
 
@@ -51,32 +53,6 @@ class JsonConfigedParser(Process):
         # pattern = re.escape(pattern)
         return re.compile(pattern)
 
-    @staticmethod
-    def execute(config, queue, numOfWorker):
-        try:
-            parser = JsonConfigedParser(config)
-            pool = Pool(processes=numOfWorker)
-
-            while True:
-                taskList = []
-                for i in range(numOfWorker):
-                    msg = queue.get()
-                    if msg is None:
-                        break
-                    else :
-                        taskList.append(msg)
-                #futures = pool.map(parser.extractFieldsFromMessages, taskList)
-                for t in taskList:
-                    parser.extractFieldsFromMessages(t)
-                    logger.debug(str(t))
-                if len(taskList) < numOfWorker:
-                    print("execute done!")
-                    break
-        except Exception as e:
-            logger.exception("execute")
-            queue.close()
-        finally:
-            pass
 
 
     def buildPatterns(self):
@@ -86,19 +62,23 @@ class JsonConfigedParser(Process):
         return patterns
 
 
-    def extractFieldsFromMessages(self, msgs):
+    def extractFieldsFromMessages(self, msgs, patterns, colNames):
         '''
             extracting in serial manner
         '''
-        patterns = self.buildPatterns()
+        
         res = []
         for msg in msgs:
-            row = dict()
-            msg = msg["_source"]["message"]
-            for col in self.colNames:
-                match = patterns[col].search(msg).group(1)
-                row[col] = match
-            res.append(row)
+            try:
+                row = dict()
+                msg = msg["_source"]["message"]
+                for col in colNames:
+                    match = patterns[col].search(msg).group(1)
+                    row[col] = match
+                res.append(row)
+            except Exception as e:
+                logger.exception(e)
+                logger.debug(msg)
         self.db.insertMany(res)
 
 
