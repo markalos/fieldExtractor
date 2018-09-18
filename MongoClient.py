@@ -1,8 +1,5 @@
 from pymongo import MongoClient
 
-client = MongoClient('localhost', 27017)
-db = client['name_of_database']
-
 class DBManager():
 	def __init__(self, *, dbName : str, collection : str, host : str, port : int):
 		
