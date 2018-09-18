@@ -5,7 +5,7 @@
 		"ip" : "ip=([\\d\\.^;]*);",
 		"oip" : "oip=([\\d\\.^;]*);",
 		"via" : "via=([^;]*);",
-		"ua" : "ua=([^;]*);",
+		"ua" : "ua=([^;]*);"
 	}, 
 	"query" : "'imap - user' AND 'authenticated'",
 	"worker" : "16"
