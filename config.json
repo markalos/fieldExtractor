@@ -5,7 +5,7 @@
 		"arguments" : {
 			"scrollTime" : "20m",
 			"winSize" : "1000",
-			"query" : "'imap - user' AND 'authenticated'"
+			"query" : "'imap - user' AND 'authenticated' AND @timestamp:[1537346535468 TO 1537347435468]"
 		}
 	},
 	"queue" : {
